@@ -1,0 +1,10 @@
+README
+------
+This script is for ensuring EMS starts as a Service with chkconfig configuration and init.d scripts.
+
+It's reasonably junk at the moment but will be updated to be a full working service script in due time.
+
+Steps to configure
+1 - Edit the ems-service-script.sh
+2 - Edit the install.sh script
+
