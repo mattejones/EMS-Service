@@ -2,6 +2,8 @@
 #
 # chkconfig: 35 90 5
 # description: EMS Service Scripts
+# 08-JAN-2014 - added ems service lock because it is required to make OS terminate service at reboot/shutdown
+
 
 . /etc/init.d/functions
 
@@ -15,7 +17,7 @@ EMSUSERNAME="emsuser"						#ems username
 EMSVERSION=7.0							#ems version
 EMSCONFIGDIR="/opt/ems_conf/tibco/cfgmgmt/ems/data" 		#ems config dir
 EMSHOMEDIR="/opt/EMS_HOME"					#ems home directory
-EMSSERVICELOCK=""						#ems service lock
+EMSSERVICELOCK="/var/lock/subsys/ems7"						#ems service lock
 
 
 ## Parent functions
@@ -58,7 +60,7 @@ checkPort()
 start()
 {
         # initlog -c "echo -n Starting EMS Server: "
-		
+		touch $EMSSERVICELOCK
         getPort
         checkPort
 		verboseLog "Starting EMS with user:" $EMSUSERNAME
@@ -75,6 +77,7 @@ stop()
 		verboseLog "Stopping EMS..."
 		verboseLog "Stoppingg EMS using EXECUTABLE from: " $EMSHOMEDIR
         $EMSHOMEDIR/ems/7.0/bin/tibemsadmin64 -server "tcp://localhost:$EMSPORT" -user admin -script $EMSHOMEDIR/ems/7.0/scripts/shutdown
+		rm -f $EMSSERVICELOCK
 }
 
 
